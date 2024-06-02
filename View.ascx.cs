@@ -108,10 +108,13 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                 {
                     string OrderDetails = "Visit Date: " + fbfo.VisitDate.ToShortDateString() + "<br />"
                                         + fbfo.ClientName.ToString() + "<br />"
-                                        + "Bags Allowed: " + fbfo.VisitNumBags.ToString();
+                                         + "Bags Allowed: " + fbfo.VisitNumBags.ToString() + "<br />"
+                                        + "Household Total: " + fbfo.HouseholdTotal.ToString() + "<br />"
+                                        + "Notes: " + fbfo.VisitNotes.ToString();
                     LabelOrderDetails.Text = OrderDetails.ToString();
                     
                     clientLanguage = fbfo.ClientLanguage.ToString();
+                    HiddenFieldHouseholdTotal.Value = fbfo.HouseholdTotal.ToString();
                 }
                
 
@@ -259,8 +262,35 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                     e.Row.Cells[0].BackColor = Color.LightGoldenrodYellow;
                     colorChoice = Color.LightGoldenrodYellow;
                 }
-
+                //HiddenFieldHouseholdTotal
+                int _thh = Int32.Parse(HiddenFieldHouseholdTotal.Value.ToString());
                 int limit = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "Limit"));
+                HiddenField hidLimitQuantities = (HiddenField)e.Row.FindControl("HiddenFieldLimitQuantities");
+                if (hidLimitQuantities.Value.ToString().Length >= 3)
+                {
+                    string dataForArray = hidLimitQuantities.Value.ToString();
+                    string[] firstArray = dataForArray.Split(',');
+                    string[] secondArray;
+                    int customLimit = 0;
+                    for (int i = 0; i < firstArray.Length; i++)
+                    {
+                        secondArray = firstArray[i].Split('=');
+                        if (_thh == Convert.ToInt16(secondArray[0]))
+                        {
+                            customLimit = Convert.ToInt16(secondArray[1]);
+                        }
+                    }
+                    //if (customLimit == 0)
+                    //{
+                    //    secondArray = firstArray[firstArray.Length - 1].Split('=');
+                    //    customLimit = Convert.ToInt16(secondArray[1]);
+                    //}
+                    if (customLimit > 0)
+                    {
+                        limit = customLimit;
+                    }
+                }
+
                 DropDownList ddlQty = (DropDownList)e.Row.FindControl("DropDownListQty");
               
                 for (int i = 1; i <= limit; i++)

@@ -31,7 +31,7 @@
     setCookie('googtrans', '/en/<%= GetClientLanguage() %>', 1);
     function googleTranslateElementInit() {
 
-        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'es,pt,ht,it,de,fr,pl,en' }, 'google_translate_element');
+        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'es,pt,ht,it,de,fr,pl,ru,uk,en' }, 'google_translate_element');
     }
 
     function setCookie(key, value, expiry) {
@@ -51,10 +51,11 @@
         
          <asp:BoundField HeaderText="Category" DataField="ProductCategory" Visible="true"></asp:BoundField>
         <asp:BoundField HeaderText="Product" DataField="ProductName" ItemStyle-VerticalAlign="Top" ItemStyle-HorizontalAlign="Left"></asp:BoundField>
-        <asp:BoundField HeaderText="Limit" DataField="Limit" ItemStyle-VerticalAlign="Top" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center"></asp:BoundField>
+        <asp:BoundField HeaderText="Limit" DataField="Limit" ItemStyle-VerticalAlign="Top" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center" Visible="false"></asp:BoundField>
         <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Order" HeaderStyle-HorizontalAlign="Center">                     
             
             <ItemTemplate>
+                <asp:HiddenField ID="HiddenFieldLimitQuantities" Value='<%# Eval("LimitQuantities") %>' runat="server" />
                 <asp:HiddenField ID="HiddenFieldProductID" Value='<%# Eval("ProductID") %>' runat="server" />
                 <asp:DropDownList ID="DropDownListQty" runat="server"><asp:ListItem Text="---" Value="0" /></asp:DropDownList>
             </ItemTemplate>
@@ -65,7 +66,7 @@
 </asp:GridView>
 
 <asp:HiddenField ID="HiddenFieldVisitID" runat="server" />
-
+<asp:HiddenField ID="HiddenFieldHouseholdTotal" runat="server" />
 
 <div>
     <asp:Button ID="ButtonSaveOrder" runat="server" Text="Save Order" OnClick="ButtonSaveOrder_Click" CssClass="btn btn-lg btn-default" Visible="false" />

@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="GIBS_FBFoodOrder" type="Module" version="00.00.03">
+    <package name="GIBS_FBFoodOrder" type="Module" version="00.00.06">
       <friendlyName>GIBS_FBFoodOrder</friendlyName>
       <description>GIBS.com GIBS_FBFoodOrder module</description>
       <iconFile>~/Images/icon_extensions_32px.png</iconFile>
@@ -26,10 +26,25 @@
               <name>00.00.01.SqlDataProvider</name>
               <version>00.00.01</version>
             </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.04.SqlDataProvider</name>
+              <version>00.00.04</version>
+            </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.05.SqlDataProvider</name>
+              <version>00.00.05</version>
+            </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.06.SqlDataProvider</name>
+              <version>00.00.06</version>
+            </script>
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.03</version>
+              <version>00.00.06</version>
             </script>
           </scripts>
         </component>
@@ -83,7 +98,7 @@
                     <controlKey>Settings</controlKey>
                     <controlSrc>DesktopModules/GIBS_FBFoodOrder/Settings.ascx</controlSrc>
                     <supportsPartialRendering>False</supportsPartialRendering>
-                    <controlTitle>GIBS_FBFoodOrder Settings</controlTitle>
+                    <controlTitle>GIBS FBFoodOrder Settings</controlTitle>
                     <controlType>Edit</controlType>
                     <iconFile />
                     <helpUrl />

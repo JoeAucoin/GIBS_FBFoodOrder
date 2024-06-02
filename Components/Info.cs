@@ -28,9 +28,36 @@ namespace GIBS.Modules.GIBS_FBFoodOrder.Components
         private string clientLanguage;
         private DateTime visitDate;
         private int visitNumBags;
+        private string clientCellPhone;
+        private int housedoldTotal;
+        private string visitNotes;
+        private string limitQuantities;
+
+
+        //GIBS_FBClients.ClientPhone, GIBS_FBClients.ClientPhoneType  clientPhone  clientPhoneType
         public FBFOInfo()
         {
 
+        }
+        public string LimitQuantities
+        {
+            get { return limitQuantities; }
+            set { limitQuantities = value; }
+        }
+        public string VisitNotes
+        {
+            get { return visitNotes; }
+            set { visitNotes = value; }
+        }
+        public int HouseholdTotal
+        {
+            get { return housedoldTotal; }
+            set { housedoldTotal = value; }
+        }
+        public string ClientCellPhone
+        {
+            get { return clientCellPhone; }
+            set { clientCellPhone = value; }
         }
 
         public string ClientName
