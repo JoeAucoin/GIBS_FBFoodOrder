@@ -16,5 +16,22 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
 {
     public class GIBS_FBFoodOrderModuleSettingsBase : ModuleSettingsBase
     {
+
+        public string FoodBankFoodTrackingModuleID
+        {
+            get
+            {
+                if (Settings.Contains("foodBankFoodTrackingModuleID"))
+                    return Settings["foodBankFoodTrackingModuleID"].ToString();
+                return "";
+
+            }
+            set
+            {
+                var mc = new ModuleController();
+                mc.UpdateTabModuleSetting(this.TabModuleId, "foodBankFoodTrackingModuleID", value.ToString());
+            }
+
+        }
     }
 }

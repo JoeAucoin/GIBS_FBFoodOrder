@@ -85,6 +85,8 @@ namespace GIBS.Modules.GIBS_FBFoodOrder.Data
 
         public abstract IDataReader GetOrder(int visitID);
 
+        public abstract IDataReader GetOrderInstructions(int moduleID);
+
         #endregion
 
     }

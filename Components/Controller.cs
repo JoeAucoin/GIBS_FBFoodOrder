@@ -42,5 +42,11 @@ namespace GIBS.Modules.GIBS_FBFoodOrder.Components
             return CBO.FillObject<FBFOInfo>(DataProvider.Instance().GetOrder(visitID));
         }
 
+        public List<FBFOInfo> GetOrderInstructions(int moduleID)
+        {
+            return CBO.FillCollection<FBFOInfo>(DataProvider.Instance().GetOrderInstructions(moduleID));
+         //   return CBO.FillObject<FBFOInfo>(DataProvider.Instance().GetOrderInstructions(moduleID));
+        }
+
     }
 }

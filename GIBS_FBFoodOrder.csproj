@@ -146,6 +146,13 @@
   <ItemGroup>
     <Content Include="Providers\DataProviders\SqlDataProvider\00.00.06.SqlDataProvider" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="install\GIBS_FBFoodOrder_00.00.06_Install.zip" />
+    <Content Include="install\GIBS_FBFoodOrder_00.00.06_Source.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Providers\DataProviders\SqlDataProvider\00.00.07.SqlDataProvider" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

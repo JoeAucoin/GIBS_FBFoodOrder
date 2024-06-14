@@ -1,0 +1,211 @@
+﻿
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_UpdateVisitOrderStatusCode]    Script Date: 6/3/2024 1:57:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_FBFoodOrder_UpdateVisitOrderStatusCode]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_FBFoodOrder_UpdateVisitOrderStatusCode]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_InsertVisitOrderItem]    Script Date: 6/3/2024 1:57:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_FBFoodOrder_InsertVisitOrderItem]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_FBFoodOrder_InsertVisitOrderItem]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrderList]    Script Date: 6/3/2024 1:57:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_FBFoodOrder_GetOrderList]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrderList]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrderInstructions]    Script Date: 6/3/2024 1:57:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_FBFoodOrder_GetOrderInstructions]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrderInstructions]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrder]    Script Date: 6/3/2024 1:57:13 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GIBS_FBFoodOrder_GetOrder]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrder]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrder]    Script Date: 6/3/2024 1:57:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+-- =============================================
+-- Author:		Joseph Aucoin
+-- Create date: 04/04/2024
+-- Description:	Food Pantry Client Order List
+-- =============================================
+CREATE PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrder]
+	-- Add the parameters for the stored procedure 
+@VisitID int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+SELECT      GIBS_FBClients.ClientID,  GIBS_FBClients.ClientFirstName + ' ' +  GIBS_FBClients.ClientLastName AS ClientName, coalesce(GIBS_FBClients.ClientLanguage, '') AS ClientLanguage, 
+			GIBS_FBClientsVisits.VisitID, GIBS_FBClientsVisits.VisitDate, GIBS_FBClientsVisits.VisitNumBags, GIBS_FBClientsVisits.VisitNotes, GIBS_FBClientsVisits.OrderStatusCode,  vw_GIBS_FBClients.HouseholdTotal
+FROM            GIBS_FBClients INNER JOIN
+                         GIBS_FBClientsVisits ON GIBS_FBClients.ClientID = GIBS_FBClientsVisits.ClientID 
+						 INNER JOIN
+                         vw_GIBS_FBClients ON GIBS_FBClients.ClientID = vw_GIBS_FBClients.ClientID
+
+						 where GIBS_FBClientsVisits.VisitID = @VisitID
+
+	
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrderInstructions]    Script Date: 6/3/2024 1:57:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrderInstructions]
+	-- Add the parameters for the stored procedure 
+@ModuleID int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	Select  
+	ProductCategory, OrderingInstructions
+	FROM dbo.GIBS_FBProductCategory
+	WHERE (isActive = 1)
+	AND
+	(Len(OrderingInstructions) > 1)
+	AND (ModuleID = @ModuleId)
+	ORDER BY SortOrder
+	
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_GetOrderList]    Script Date: 6/3/2024 1:57:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+
+-- =============================================
+-- Author:		Joseph Aucoin
+-- Create date: 04/04/2024
+-- Description:	Food Pantry Client Order List
+-- =============================================
+CREATE PROCEDURE [dbo].[GIBS_FBFoodOrder_GetOrderList]
+	-- Add the parameters for the stored procedure 
+@VisitID int,
+@ClientID int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	if exists(SELECT  1 FROM [dbo].[GIBS_FBClientsVisits]  WHERE [VisitID] = @VisitID AND [ClientID] = @ClientID AND (OrderStatusCode = 1  OR OrderStatusCode = 0))
+			begin
+
+			SELECT       GIBS_FBProducts.ProductID, GIBS_FBProducts.ProductName, GIBS_FBProductCategory.ProductCategory, GIBS_FBProducts.Limit,  
+			GIBS_FBProductCategory.OrderingInstructions, 
+			coalesce(GIBS_FBProducts.LimitQuantities,'') AS LimitQuantities
+			FROM    GIBS_FBProductCategory INNER JOIN
+					GIBS_FBProducts ON GIBS_FBProductCategory.ProductCategoryID = GIBS_FBProducts.ProductCategoryID 
+				WHERE GIBS_FBProducts.isActive = 1
+				ORDER BY GIBS_FBProductCategory.SortOrder, ProductCategory, GIBS_FBProducts.ProductName
+	END
+	--ELSE
+	--BEGIN
+	--SELECT 0 AS ProductID
+	--END
+
+	return
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_InsertVisitOrderItem]    Script Date: 6/3/2024 1:57:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+-- =============================================
+-- Author:		Joseph Aucoin
+-- Create date: 04/04/2024
+-- Description:	Food Pantry Client Order List
+-- =============================================
+CREATE PROCEDURE [dbo].[GIBS_FBFoodOrder_InsertVisitOrderItem]
+	-- Add the parameters for the stored procedure here
+--	<@Param1, sysname, @p1> <Datatype_For_Param1, , int> = <Default_Value_For_Param1, , 0>, 
+ @VisitID int,
+ @ProductID int,
+ @Quantity int 
+AS
+BEGIN
+	INSERT INTO [dbo].[GIBS_FBClientsVisitItem]
+           ([VisitID]
+           ,[ProductID]
+           ,[Quantity])
+     VALUES
+           (@VisitID
+           ,@ProductID
+           ,@Quantity)
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GIBS_FBFoodOrder_UpdateVisitOrderStatusCode]    Script Date: 6/3/2024 1:57:13 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+-- =============================================
+-- Author:		Joseph Aucoin
+-- Create date: 04/04/2024
+-- Description:	Food Pantry Client Order List
+-- =============================================
+CREATE PROCEDURE [dbo].[GIBS_FBFoodOrder_UpdateVisitOrderStatusCode]
+	
+@VisitID int,
+@OrderStatusCode int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	UPDATE [dbo].[GIBS_FBClientsVisits]
+   SET  [OrderStatusCode] = @OrderStatusCode
+ WHERE VisitID = @VisitID
+
+END
+GO
+
+

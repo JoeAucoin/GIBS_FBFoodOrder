@@ -32,12 +32,19 @@ namespace GIBS.Modules.GIBS_FBFoodOrder.Components
         private int housedoldTotal;
         private string visitNotes;
         private string limitQuantities;
+        private string orderingInstructions;
 
 
         //GIBS_FBClients.ClientPhone, GIBS_FBClients.ClientPhoneType  clientPhone  clientPhoneType
         public FBFOInfo()
         {
 
+        }
+
+        public string OrderingInstructions
+        {
+            get { return orderingInstructions; }
+            set { orderingInstructions = value; }
         }
         public string LimitQuantities
         {

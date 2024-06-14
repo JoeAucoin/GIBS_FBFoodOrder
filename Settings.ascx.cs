@@ -12,7 +12,10 @@
 
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.Services.Localization;
 using System;
+using System.Collections;
+using System.Web.UI.WebControls;
 
 namespace GIBS.Modules.GIBS_FBFoodOrder
 {
@@ -51,17 +54,7 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
             {
                 if (Page.IsPostBack == false)
                 {
-                    //Check for existing settings and use those on this page
-                    //Settings["SettingName"]
-
-                    /* uncomment to load saved settings in the text boxes
-                    if(Settings.Contains("Setting1"))
-                        txtSetting1.Text = Settings["Setting1"].ToString();
-			
-                    if (Settings.Contains("Setting2"))
-                        txtSetting2.Text = Settings["Setting2"].ToString();
-
-                    */
+                    BindModules();
 
                 }
             }
@@ -76,20 +69,47 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
         /// UpdateSettings saves the modified settings to the Database
         /// </summary>
         /// -----------------------------------------------------------------------------
+
+        private void BindModules()
+        {
+
+            DotNetNuke.Entities.Modules.ModuleController mc = new ModuleController();
+            ArrayList existMods = mc.GetModulesByDefinition(this.PortalId, "GIBS Food Bank Food Tracking");
+
+            foreach (DotNetNuke.Entities.Modules.ModuleInfo mi in existMods)
+            {
+                if (!mi.IsDeleted)
+                {
+
+                    ListItem objListItemPage = new ListItem();
+                    objListItemPage.Value = mi.ModuleID.ToString();
+                  //  objListItemPage.Value = mi.TabID.ToString() + "-" + mi.ModuleID.ToString();
+                    objListItemPage.Text = mi.ModuleTitle.ToString();
+
+                    drpModuleID.Items.Add(objListItemPage);
+
+                }
+            }
+
+            drpModuleID.Items.Insert(0, new ListItem(Localization.GetString("SelectModule", this.LocalResourceFile), "-1"));
+
+            if (Settings.Contains("foodBankFoodTrackingModuleID"))
+            {
+                drpModuleID.SelectedValue = Settings["foodBankFoodTrackingModuleID"].ToString();
+                //   LabelDebug.Text = Settings["foodBankClientModuleID"].ToString();
+
+            }
+
+        }
+
         public override void UpdateSettings()
         {
             try
             {
                 var modules = new ModuleController();
 
-                //the following are two sample Module Settings, using the text boxes that are commented out in the ASCX file.
-                //module settings
-                //modules.UpdateModuleSetting(ModuleId, "Setting1", txtSetting1.Text);
-                //modules.UpdateModuleSetting(ModuleId, "Setting2", txtSetting2.Text);
-
-                //tab module settings
-                //modules.UpdateTabModuleSetting(TabModuleId, "Setting1",  txtSetting1.Text);
-                //modules.UpdateTabModuleSetting(TabModuleId, "Setting2",  txtSetting2.Text);
+                FoodBankFoodTrackingModuleID = drpModuleID.SelectedValue.ToString();
+               
             }
             catch (Exception exc) //Module failed to load
             {

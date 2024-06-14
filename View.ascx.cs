@@ -48,13 +48,15 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
 
 //        private GridViewHelper helper;
         static string clientLanguage = "";
+        public string _instructions = "";
+        public int _FoodBankFoodTrackingModuleID;
 
         //protected override void OnInit(EventArgs e)
         //{
         //    base.OnInit(e);
 
         //    DotNetNuke.Web.Client.ClientResourceManagement.ClientResourceManager.RegisterScript(this.Page, "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit", FileOrder.Js.DefaultPriority, "DnnPageHeaderProvider");
-          
+
         //}
 
         protected void Page_Load(object sender, EventArgs e)
@@ -76,6 +78,7 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                         HiddenFieldVisitID.Value = visitID.ToString();
                         //LabelDebug.Text = visitID.ToString() + " ---- " +  clientID.ToString();
                         GetOrder(visitID);
+                        GetInstructions();
                      //   GroupIt();
                         FillProductsGrid(visitID, clientID);
                     }
@@ -126,8 +129,43 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
 
         }
 
-        
-            protected string GetClientLanguage()
+        public void GetInstructions()
+        {
+
+            try
+            {
+                int mid = 0;
+                if (Settings.Contains("foodBankFoodTrackingModuleID"))
+                {
+                    mid = Int16.Parse(Settings["foodBankFoodTrackingModuleID"].ToString());
+                }
+
+                List<FBFOInfo> items;
+                Controller controller = new Controller();
+                items = controller.GetOrderInstructions(mid);
+                if (items == null || items.Count == 0)
+                {
+                    GridViewInstructions.Visible = false;
+                }
+                else
+                {
+                    
+                    GridViewInstructions.DataSource = items;
+                    GridViewInstructions.DataBind();
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Exceptions.ProcessModuleLoadException(this, ex);
+            }
+
+        }
+
+
+        protected string GetClientLanguage()
         {
             //  return ;
 
@@ -156,6 +194,7 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                     ButtonSaveOrder.Visible = true;
                     GridViewOrderSheet.DataSource = items;
                     GridViewOrderSheet.DataBind();
+
                 }
                 
 
@@ -300,9 +339,15 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                     ddlQty.Items.Add(lst); ;
                 }
 
+                //string instructions = DataBinder.Eval(e.Row.DataItem, "OrderingInstructions").ToString();
+                //string productCategory = DataBinder.Eval(e.Row.DataItem, "ProductCategory").ToString();
+                //if (instructions.Length > 0)
+                //{
+                //    _instructions += "<b>" + productCategory.ToString() + ":</b> " + instructions.ToString() + "<br />";
+                //}
 
-                
             }
+           // LabelInstructions.Text = _instructions.ToString();
         }
 
         protected void ButtonSaveOrder_Click(object sender, EventArgs e)

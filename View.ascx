@@ -43,8 +43,18 @@
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
+<h3>
+    <asp:Label ID="LabelInstructions" runat="server" Text="Ordering Instructions"></asp:Label>
+</h3>
+<asp:GridView ID="GridViewInstructions" runat="server" HorizontalAlign="Center" AutoGenerateColumns="False" CssClass="table table-striped">
 
+     <Columns>
+         <asp:BoundField HeaderText="Category" DataField="ProductCategory" Visible="true"></asp:BoundField>
+         <asp:BoundField HeaderText="Instructions" DataField="OrderingInstructions" Visible="true"></asp:BoundField>
+     </Columns>
+</asp:GridView>
 
+<h3>Order Sheet</h3>
 <asp:GridView ID="GridViewOrderSheet" runat="server" HorizontalAlign="Center" OnSorting="GridViewOrderSheet_Sorting" 
     AutoGenerateColumns="False" OnRowDataBound="GridViewOrderSheet_RowDataBound" CssClass="table table-striped">
      <Columns>

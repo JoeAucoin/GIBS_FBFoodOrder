@@ -160,6 +160,11 @@ namespace GIBS.Modules.GIBS_FBFoodOrder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetOrder", visitID);
         }
 
+        public override IDataReader GetOrderInstructions(int moduleID)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetOrderInstructions", moduleID);
+        }
+
         #endregion
 
     }

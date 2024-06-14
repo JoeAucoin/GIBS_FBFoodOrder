@@ -33,6 +33,24 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
         protected global::System.Web.UI.WebControls.Label LabelOrderDetails;
 
         /// <summary>
+        /// LabelInstructions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelInstructions;
+
+        /// <summary>
+        /// GridViewInstructions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewInstructions;
+
+        /// <summary>
         /// GridViewOrderSheet control.
         /// </summary>
         /// <remarks>
