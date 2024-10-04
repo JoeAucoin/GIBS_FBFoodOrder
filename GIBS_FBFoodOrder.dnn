@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="GIBS_FBFoodOrder" type="Module" version="00.00.07">
+    <package name="GIBS_FBFoodOrder" type="Module" version="00.00.08">
       <friendlyName>GIBS_FBFoodOrder</friendlyName>
       <description>GIBS.com GIBS_FBFoodOrder module</description>
       <iconFile>~/Images/icon_extensions_32px.png</iconFile>
@@ -49,7 +49,7 @@
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.07</version>
+              <version>00.00.08</version>
             </script>
           </scripts>
         </component>

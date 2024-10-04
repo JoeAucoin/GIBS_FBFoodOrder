@@ -54,7 +54,7 @@
      </Columns>
 </asp:GridView>
 
-<h3>Order Sheet</h3>
+<h3 id="OrderSheetLabel" runat="server">Order Sheet</h3>
 <asp:GridView ID="GridViewOrderSheet" runat="server" HorizontalAlign="Center" OnSorting="GridViewOrderSheet_Sorting" 
     AutoGenerateColumns="False" OnRowDataBound="GridViewOrderSheet_RowDataBound" CssClass="table table-striped">
      <Columns>

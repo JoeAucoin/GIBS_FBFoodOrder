@@ -109,6 +109,7 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
 
                 if (fbfo != null)
                 {
+                   // fbfo.OrderStatusCode
                     string OrderDetails = "Visit Date: " + fbfo.VisitDate.ToShortDateString() + "<br />"
                                         + fbfo.ClientName.ToString() + "<br />"
                                          + "Bags Allowed: " + fbfo.VisitNumBags.ToString() + "<br />"
@@ -187,6 +188,12 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                     ButtonSaveOrder.Visible = false;
                     LabelDebug.Visible = true;
                     LabelDebug.Text = "This page is no longer valid.";
+
+                    OrderSheetLabel.Visible = false;
+                    GridViewOrderSheet.Visible = false;
+                    GridViewInstructions.Visible = false;
+                    ButtonSaveOrder.Visible = false;
+                    LabelInstructions.Visible = false;
                 }
                 else
                 {
@@ -368,31 +375,69 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
             {
                int visitID =  Int32.Parse(HiddenFieldVisitID.Value.ToString());
 
+                Controller controller1 = new Controller();
+                FBFOInfo fbfo = controller1.GetOrder(visitID);
+
+                var orderStatus = "2";
+                if (fbfo != null)
+                {
+                    orderStatus = fbfo.OrderStatusCode.ToString();
+                }
+
+
                 //  UnGroupIt();
 
-               // GridViewOrderSheet.isv
-                foreach (GridViewRow row in GridViewOrderSheet.Rows)
+                // GridViewOrderSheet.isv
+
+                if (orderStatus != "2")
                 {
-                    // row.TableSection
-                    if(row.TableSection != TableRowSection.TableHeader) 
+                    foreach (GridViewRow row in GridViewOrderSheet.Rows)
                     {
-                      //  object rows;
-                        if ((DropDownList)row.FindControl("DropDownListQty") is DropDownList ddlQty1)
+                        // row.TableSection
+                        if (row.TableSection != TableRowSection.TableHeader)
                         {
-                            //if (ddlQty1.SelectedIndex > 0)
-                            if (ddlQty1.SelectedValue.ToString() != "0")
+                            //  object rows;
+                            if ((DropDownList)row.FindControl("DropDownListQty") is DropDownList ddlQty1)
                             {
-                                //   DropDownList ddlQty = (DropDownList)row.FindControl("DropDownListQty");
-                                HiddenField hidProductID = (HiddenField)row.FindControl("HiddenFieldProductID");
-                                int productID = Convert.ToInt32(hidProductID.Value.ToString());
-                                SaveOrderItem(visitID, productID, Int32.Parse(ddlQty1.SelectedValue.ToString()));
+                                //if (ddlQty1.SelectedIndex > 0)
+                                if (ddlQty1.SelectedValue.ToString() != "0")
+                                {
+                                    //   DropDownList ddlQty = (DropDownList)row.FindControl("DropDownListQty");
+                                    HiddenField hidProductID = (HiddenField)row.FindControl("HiddenFieldProductID");
+                                    int productID = Convert.ToInt32(hidProductID.Value.ToString());
+                                    SaveOrderItem(visitID, productID, Int32.Parse(ddlQty1.SelectedValue.ToString()));
+                                }
+                            }
+                            else
+                            {
+
                             }
                         }
-                        else
-                        {
-
-                        }
                     }
+
+                    Controller controller = new Controller();
+                    FBFOInfo item = new FBFOInfo();
+                    item.OrderStatusCode = 2;
+                    item.VisitID = visitID;
+                    controller.UpdateVisitOrderStatusCode(item);
+
+                    OrderSheetLabel.Visible = false;
+                    GridViewOrderSheet.Visible = false;
+                    GridViewInstructions.Visible = false;
+                    ButtonSaveOrder.Visible = false;
+                    LabelInstructions.Visible = false;
+
+
+                }
+                else
+                {
+                    LabelInstructions.Visible = true;
+                    LabelInstructions.Text = "Don't try to cheat by using the BACK BUTON! I'll report you.";
+                    OrderSheetLabel.Visible = false;
+                    GridViewOrderSheet.Visible = false;
+                    GridViewInstructions.Visible = false;
+                    ButtonSaveOrder.Visible = false;
+                    
                 }
 
 
@@ -423,11 +468,7 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
                 //    }
                 //}
 
-                Controller controller = new Controller();
-                FBFOInfo item = new FBFOInfo();
-                item.OrderStatusCode = 2;
-                item.VisitID = visitID;
-                controller.UpdateVisitOrderStatusCode(item);
+
             }
             catch (Exception ex)
             {
