@@ -10,21 +10,23 @@
 ' 
 */
 
+using DotNetNuke.Common.Lists;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
+using DotNetNuke.Web.Client;
 using GIBS.Modules.GIBS_FBFoodOrder.Components;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Drawing;
-using DotNetNuke.Web.Client;
 //using DotNetNuke.Web.Client.ClientResourceManagement;
 
 
@@ -171,6 +173,12 @@ namespace GIBS.Modules.GIBS_FBFoodOrder
             //  return ;
 
             return clientLanguage.ToString().ToLower();
+        }
+
+        protected string GatAvailableLanguages()
+        {
+            var cLanguage = new ListController().GetListEntryInfoItems("ClientLanguage", "", this.PortalId);
+            return string.Join(",", cLanguage.Select(l => l.Value.ToLower()));
         }
 
 

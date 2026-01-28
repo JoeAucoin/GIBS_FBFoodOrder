@@ -31,7 +31,7 @@
     setCookie('googtrans', '/en/<%= GetClientLanguage() %>', 1);
     function googleTranslateElementInit() {
 
-        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'es,pt,ht,it,de,fr,pl,ru,uk,en' }, 'google_translate_element');
+        new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: '<%= GatAvailableLanguages() %>' }, 'google_translate_element');
     }
 
     function setCookie(key, value, expiry) {
@@ -67,7 +67,7 @@
             <ItemTemplate>
                 <asp:HiddenField ID="HiddenFieldLimitQuantities" Value='<%# Eval("LimitQuantities") %>' runat="server" />
                 <asp:HiddenField ID="HiddenFieldProductID" Value='<%# Eval("ProductID") %>' runat="server" />
-                <asp:DropDownList ID="DropDownListQty" runat="server"><asp:ListItem Text="---" Value="0" /></asp:DropDownList>
+                <asp:DropDownList ID="DropDownListQty" runat="server" CssClass="qtyDropdown"><asp:ListItem Text="---" Value="0" /></asp:DropDownList>
             </ItemTemplate>
         </asp:TemplateField>
          <asp:BoundField HeaderText="ProductID" DataField="ProductID" Visible="false"></asp:BoundField>
